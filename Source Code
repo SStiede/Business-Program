@@ -1,0 +1,84 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Scanner;
+
+public class DeepClean {
+	
+	public static void main(String args[]) {
+		
+		//Creating Scanner object
+		Scanner input = new Scanner(System.in);
+		
+		//String variables listed here
+		//Information on the business
+		String businessName = "Shadoe's Deep Cleaning Services";
+		String[] services = {"Regular wash (Outside of vehicle only)", "Detail wash (Outside and limited inside cleaning)" , "Deep Clean (Whole car cleaned)"};
+		String[] hours = {"6am to 10pm", "10:30pm to 2:30", "3pm to 7:00pm"};
+		
+		//Information for the order
+		ArrayList<String> order = new ArrayList<>();
+		Calendar date = Calendar.getInstance();
+		int timeIndex = 0;
+		
+		//Menu
+		//Displays business info
+		System.out.println("Welcome to " + businessName + "!");
+		System.out.println("The following services are offered: ");
+			for(int i = 0; i < services.length; i++) {
+				System.out.println((i + 1) + ". " + services[i]);
+			}
+		System.out.println("Hours of Operation are " + hours[0] + ", " + hours[1] + ", " + hours[2] + ".");
+		
+		//User input on what service they would like
+		int choice  = 0;
+		while (choice != services.length + 1) {
+			System.out.println("Select a service (1-" + services.length + ") or enter " + (services.length + 1) + " to finish your order:");
+			choice = input.nextInt();
+			if (choice > 0 && choice <= services.length)
+			{	
+				order.add(services[choice - 1]);
+				}
+		}
+		
+		//Creating the date format and outputting to screen
+		DateFormat dateFormat = new
+		SimpleDateFormat("MM/dd/yyyy");
+		System.out.print("When would you like to schedule your appointment (MM/dd/yyyy): ");
+		String dateString = input.next();
+		
+		//Checking to see if date format is followed or not
+		try{
+			date.setTime(dateFormat.parse(dateString));
+			}catch (Exception e) {
+				System.out.println("Invalid date format. Appointment not set.");
+			}
+			
+			System.out.println("What time slot would you like your appointment:");
+				for (int i = 0; i < hours.length; i++) {
+					System.out.println((i + 1) + ". " + hours[i]);
+				}
+				System.out.print("Enter your choice (1-" + hours.length + "): ");
+					timeIndex = input.nextInt() - 1;
+					
+		//Ending menu showing the user what they ordered and what date and time they selected 
+		System.out.println("Order summary:");
+		System.out.println("Services: " + order);
+		System.out.println("Date: " + dateFormat.format(date.getTime()));
+		System.out.println("Time: " + hours[timeIndex]);
+		
+		//Saving order summary to a file
+		try {
+			FileWriter writer = new
+			FileWriter("order.txt");
+			writer.write("Order summary:\n");
+			writer.write("Services: " + order + "\n");
+			writer.close();
+		}catch (Exception e) {
+			System.out.println("Error writing to file");
+		}
+	}
+}
